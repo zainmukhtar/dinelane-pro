@@ -1,1 +1,1 @@
-export {default, generateMetadata} from '@/features/checkout/routes/page';
+export { default, generateMetadata } from '@/features/checkout/routes/page';

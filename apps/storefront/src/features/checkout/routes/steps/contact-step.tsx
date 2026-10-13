@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Link, useRouter } from '@/platform/i18n/navigation';
 import { setCustomerForOrder, SetCustomerForOrderResult } from '../actions';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 interface ContactStepProps {
   onComplete: () => void;
@@ -88,7 +88,10 @@ export default function ContactStep({ onComplete }: ContactStepProps) {
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
         {t('alreadyHaveAccount')}{' '}
-        <Link href="/sign-in?redirectTo=/checkout" className="text-primary underline hover:no-underline">
+        <Link
+          href="/sign-in?redirectTo=/checkout"
+          className="text-primary underline hover:no-underline"
+        >
           {t('signInLink')}
         </Link>
       </p>
@@ -130,15 +133,12 @@ export default function ContactStep({ onComplete }: ContactStepProps) {
 
             <Field>
               <FieldLabel htmlFor="lastName">{t('lastName')}</FieldLabel>
-              <Input
-                id="lastName"
-                {...register('lastName', { required: t('lastNameRequired') })}
-              />
+              <Input id="lastName" {...register('lastName', { required: t('lastNameRequired') })} />
               <FieldError>{errors.lastName?.message}</FieldError>
             </Field>
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full mt-4">
+          <Button type="submit" disabled={loading} className="mt-4 w-full">
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t('continue')}
           </Button>

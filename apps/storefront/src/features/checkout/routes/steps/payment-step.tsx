@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { CreditCard } from 'lucide-react';
 import { useCheckout } from '../checkout-provider';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 interface PaymentStepProps {
   onComplete: () => void;
@@ -23,7 +23,7 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
 
   if (paymentMethods.length === 0) {
     return (
-      <div className="text-center py-8">
+      <div className="py-8 text-center">
         <p className="text-muted-foreground">{t('noPaymentMethods')}</p>
       </div>
     );
@@ -33,7 +33,10 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
     <div className="space-y-6">
       <h3 className="font-semibold">{t('selectPaymentMethod')}</h3>
 
-      <RadioGroup value={selectedPaymentMethodCode || ''} onValueChange={setSelectedPaymentMethodCode}>
+      <RadioGroup
+        value={selectedPaymentMethodCode || ''}
+        onValueChange={setSelectedPaymentMethodCode}
+      >
         {paymentMethods.map((method) => (
           <Label key={method.code} htmlFor={method.code} className="cursor-pointer">
             <Card className="p-4">
@@ -43,7 +46,10 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
                 <div className="flex-1">
                   <p className="font-medium">{method.name}</p>
                   {method.description && (
-                    <p className="text-sm text-muted-foreground mt-1" dangerouslySetInnerHTML={{ __html: method.description }} />
+                    <p
+                      className="mt-1 text-sm text-muted-foreground"
+                      dangerouslySetInnerHTML={{ __html: method.description }}
+                    />
                   )}
                 </div>
               </div>
@@ -52,11 +58,7 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
         ))}
       </RadioGroup>
 
-      <Button
-        onClick={handleContinue}
-        disabled={!selectedPaymentMethodCode}
-        className="w-full"
-      >
+      <Button onClick={handleContinue} disabled={!selectedPaymentMethodCode} className="w-full">
         {t('continueToReview')}
       </Button>
     </div>

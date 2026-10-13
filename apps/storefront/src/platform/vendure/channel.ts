@@ -1,6 +1,6 @@
-import {cacheLife} from 'next/cache';
-import {query} from './api';
-import {GetActiveChannelQuery} from './channel-graphql';
+import { cacheLife } from 'next/cache';
+import { query } from './api';
+import { GetActiveChannelQuery } from './channel-graphql';
 
 /**
  * Get the active channel with caching enabled.
@@ -8,9 +8,9 @@ import {GetActiveChannelQuery} from './channel-graphql';
  * Channel configuration is language-independent, so no locale is required.
  */
 export async function getActiveChannel() {
-    'use cache';
-    cacheLife('hours');
+  'use cache';
+  cacheLife('hours');
 
-    const result = await query(GetActiveChannelQuery);
-    return result.data.activeChannel;
+  const result = await query(GetActiveChannelQuery);
+  return result.data.activeChannel;
 }

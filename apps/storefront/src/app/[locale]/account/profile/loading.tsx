@@ -1,1 +1,1 @@
-export {default} from '@/features/account/routes/profile/loading';
+export { default } from '@/features/account/routes/profile/loading';

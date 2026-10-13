@@ -3,9 +3,5 @@
   "upstream": "https://github.com/vendurehq/nextjs-starter-vendure.git",
   "version": "1.0.0",
   "commit": null,
-  "verification": [
-    "npm run lint",
-    "npm run check-types",
-    "npm run build"
-  ]
+  "verification": ["npm run lint", "npm run check-types", "npm run build"]
 }

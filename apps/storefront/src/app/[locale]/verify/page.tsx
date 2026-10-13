@@ -1,1 +1,1 @@
-export {default, metadata} from '@/features/authentication/routes/verify/page';
+export { default, metadata } from '@/features/authentication/routes/verify/page';

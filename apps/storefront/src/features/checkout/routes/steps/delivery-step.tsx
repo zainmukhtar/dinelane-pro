@@ -9,8 +9,8 @@ import { Loader2, Truck } from 'lucide-react';
 import { useRouter } from '@/platform/i18n/navigation';
 import { useCheckout } from '../checkout-provider';
 import { setShippingMethod as setShippingMethodAction } from '../actions';
-import {useTranslations, useLocale} from 'next-intl';
-import {toIntlLocale} from '@/platform/i18n/locale-utils';
+import { useTranslations, useLocale } from 'next-intl';
+import { toIntlLocale } from '@/platform/i18n/locale-utils';
 
 interface DeliveryStepProps {
   onComplete: () => void;
@@ -47,7 +47,7 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
 
   if (shippingMethods.length === 0) {
     return (
-      <div className="text-center py-8">
+      <div className="py-8 text-center">
         <p className="text-muted-foreground">{t('noShippingMethods')}</p>
       </div>
     );
@@ -62,19 +62,17 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
           <Label key={method.id} htmlFor={method.id} className="cursor-pointer">
             <Card className="p-4">
               <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3 flex-1">
+                <div className="flex flex-1 items-center gap-3">
                   <RadioGroupItem value={method.id} id={method.id} />
                   <Truck className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <p className="font-medium">{method.name}</p>
                     {method.description && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {method.description}
-                      </p>
+                      <p className="mt-1 text-sm text-muted-foreground">{method.description}</p>
                     )}
                   </div>
                 </div>
-                <div className="text-right flex-shrink-0">
+                <div className="flex-shrink-0 text-right">
                   <p className="font-semibold">
                     {method.priceWithTax === 0
                       ? t('free')

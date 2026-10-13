@@ -1,1 +1,1 @@
-export {default} from '@/features/checkout/routes/loading';
+export { default } from '@/features/checkout/routes/loading';

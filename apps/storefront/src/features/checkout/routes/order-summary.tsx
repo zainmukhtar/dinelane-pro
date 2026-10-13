@@ -9,40 +9,42 @@ import { Separator } from '@/components/ui/separator';
 import { OrderLine } from './types';
 import { useCheckout } from './checkout-provider';
 import { Price } from '@/features/pricing/price';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
-function OrderSummaryContent({ order, t }: { order: ReturnType<typeof useCheckout>['order']; t: ReturnType<typeof useTranslations<'Checkout'>> }) {
+function OrderSummaryContent({
+  order,
+  t,
+}: {
+  order: ReturnType<typeof useCheckout>['order'];
+  t: ReturnType<typeof useTranslations<'Checkout'>>;
+}) {
   return (
     <div className="space-y-4">
       <div className="space-y-3">
         {order.lines.map((line: OrderLine) => (
           <div key={line.id} className="flex gap-3">
             {line.productVariant.product.featuredAsset ? (
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
+              <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                 <Image
                   src={line.productVariant.product.featuredAsset.preview}
                   alt={line.productVariant.name}
                   width={56}
                   height={56}
-                  className="object-cover w-full h-full"
+                  className="h-full w-full object-cover"
                 />
               </div>
             ) : (
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg bg-muted flex items-center justify-center">
+              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg bg-muted">
                 <ShoppingBag className="h-5 w-5 text-muted-foreground" />
               </div>
             )}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium line-clamp-2">
-                {line.productVariant.product.name}
-              </p>
+            <div className="min-w-0 flex-1">
+              <p className="line-clamp-2 text-sm font-medium">{line.productVariant.product.name}</p>
               {line.productVariant.name !== line.productVariant.product.name && (
-                <p className="text-xs text-muted-foreground">
-                  {line.productVariant.name}
-                </p>
+                <p className="text-xs text-muted-foreground">{line.productVariant.name}</p>
               )}
               <p className="text-xs text-muted-foreground">
-                {t('qty', {quantity: line.quantity})}
+                {t('qty', { quantity: line.quantity })}
               </p>
             </div>
             <div className="text-sm font-medium">
@@ -78,16 +80,18 @@ function OrderSummaryContent({ order, t }: { order: ReturnType<typeof useCheckou
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">{t('shipping')}</span>
           <span>
-            {order.shippingWithTax > 0
-              ? <Price value={order.shippingWithTax} currencyCode={order.currencyCode} />
-              : t('toBeCalculated')}
+            {order.shippingWithTax > 0 ? (
+              <Price value={order.shippingWithTax} currencyCode={order.currencyCode} />
+            ) : (
+              t('toBeCalculated')
+            )}
           </span>
         </div>
       </div>
 
       <Separator />
 
-      <div className="flex justify-between font-bold text-lg">
+      <div className="flex justify-between text-lg font-bold">
         <span>{t('total')}</span>
         <span>
           <Price value={order.totalWithTax} currencyCode={order.currencyCode} />
@@ -113,13 +117,16 @@ export default function OrderSummary() {
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <ShoppingBag className="h-5 w-5" />
-                    {t('orderSummary')} ({order.lines.length} {order.lines.length === 1 ? t('item') : t('items')})
+                    {t('orderSummary')} ({order.lines.length}{' '}
+                    {order.lines.length === 1 ? t('item') : t('items')})
                   </CardTitle>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-lg">
+                    <span className="text-lg font-bold">
                       <Price value={order.totalWithTax} currencyCode={order.currencyCode} />
                     </span>
-                    <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                    />
                   </div>
                 </div>
               </CardHeader>

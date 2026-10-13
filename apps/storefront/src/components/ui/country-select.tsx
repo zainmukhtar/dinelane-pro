@@ -12,11 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Country {
   code: string;
@@ -36,9 +32,19 @@ export function CountrySelect({ countries, value, onValueChange, disabled }: Cou
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger render={<Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between" disabled={disabled} />}>
-          {selectedCountry ? selectedCountry.name : 'Select country...'}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      <PopoverTrigger
+        render={
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+            disabled={disabled}
+          />
+        }
+      >
+        {selectedCountry ? selectedCountry.name : 'Select country...'}
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
         <Command>
@@ -58,7 +64,7 @@ export function CountrySelect({ countries, value, onValueChange, disabled }: Cou
                   <Check
                     className={cn(
                       'mr-2 h-4 w-4',
-                      value === country.code ? 'opacity-100' : 'opacity-0'
+                      value === country.code ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                   {country.name}

@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -114,7 +114,8 @@
 }
 
 @layer base {
-  html {}
+  html {
+  }
   * {
     @apply border-border outline-ring/50;
   }

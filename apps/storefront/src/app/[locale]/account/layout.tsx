@@ -1,1 +1,1 @@
-export {default, metadata} from '@/features/account/routes/layout';
+export { default, metadata } from '@/features/account/routes/layout';

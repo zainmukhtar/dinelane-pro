@@ -7,7 +7,15 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Field, FieldLabel, FieldError, FieldGroup } from '@/components/ui/field';
 import { useForm, Controller } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
@@ -15,7 +23,7 @@ import { useRouter } from '@/platform/i18n/navigation';
 import { useCheckout } from '../checkout-provider';
 import { setShippingAddress, createCustomerAddress } from '../actions';
 import { CountrySelect } from '@/components/ui/country-select';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 interface ShippingAddressStepProps {
   onComplete: () => void;
@@ -42,7 +50,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
       const matchingAddress = addresses.find(
         (a) =>
           a.streetLine1 === order.shippingAddress?.streetLine1 &&
-          a.postalCode === order.shippingAddress?.postalCode
+          a.postalCode === order.shippingAddress?.postalCode,
       );
       if (matchingAddress) return matchingAddress.id;
     }
@@ -67,7 +75,10 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
         city: order.shippingAddress.city || '',
         province: order.shippingAddress.province || '',
         postalCode: order.shippingAddress.postalCode || '',
-        countryCode: countries.find(c => c.name === order.shippingAddress?.country)?.code || countries[0]?.code || 'US',
+        countryCode:
+          countries.find((c) => c.name === order.shippingAddress?.country)?.code ||
+          countries[0]?.code ||
+          'US',
         phoneNumber: order.shippingAddress.phoneNumber || order.customer?.phoneNumber || '',
         company: order.shippingAddress.company || '',
       };
@@ -79,8 +90,14 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
     };
   };
 
-  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<AddressFormData>({
-    defaultValues: getDefaultFormValues()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    control,
+  } = useForm<AddressFormData>({
+    defaultValues: getDefaultFormValues(),
   });
 
   const handleSelectExistingAddress = async () => {
@@ -88,20 +105,23 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
     setLoading(true);
     try {
-      const selectedAddress = addresses.find(a => a.id === selectedAddressId);
+      const selectedAddress = addresses.find((a) => a.id === selectedAddressId);
       if (!selectedAddress) return;
 
-      await setShippingAddress({
-        fullName: selectedAddress.fullName || '',
-        company: selectedAddress.company || '',
-        streetLine1: selectedAddress.streetLine1,
-        streetLine2: selectedAddress.streetLine2 || '',
-        city: selectedAddress.city || '',
-        province: selectedAddress.province || '',
-        postalCode: selectedAddress.postalCode || '',
-        countryCode: selectedAddress.country.code,
-        phoneNumber: selectedAddress.phoneNumber || '',
-      }, useSameForBilling);
+      await setShippingAddress(
+        {
+          fullName: selectedAddress.fullName || '',
+          company: selectedAddress.company || '',
+          streetLine1: selectedAddress.streetLine1,
+          streetLine2: selectedAddress.streetLine2 || '',
+          city: selectedAddress.city || '',
+          province: selectedAddress.province || '',
+          postalCode: selectedAddress.postalCode || '',
+          countryCode: selectedAddress.country.code,
+          phoneNumber: selectedAddress.phoneNumber || '',
+        },
+        useSameForBilling,
+      );
 
       router.refresh();
       onComplete();
@@ -177,19 +197,13 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
               <Field>
                 <FieldLabel htmlFor="city">{t('city')}</FieldLabel>
-                <Input
-                  id="city"
-                  {...register('city', { required: t('cityRequired') })}
-                />
+                <Input id="city" {...register('city', { required: t('cityRequired') })} />
                 <FieldError>{errors.city?.message}</FieldError>
               </Field>
 
               <Field>
                 <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
-                <Input
-                  id="province"
-                  {...register('province')}
-                />
+                <Input id="province" {...register('province')} />
                 <FieldError>{errors.province?.message}</FieldError>
               </Field>
 
@@ -231,7 +245,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
               </Field>
             </div>
 
-            <div className="flex items-center space-x-2 mt-4">
+            <div className="mt-4 flex items-center space-x-2">
               <Checkbox
                 id="same-billing-guest"
                 checked={useSameForBilling}
@@ -239,13 +253,13 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
               />
               <label
                 htmlFor="same-billing-guest"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t('useSameForBilling')}
               </label>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full mt-4">
+            <Button type="submit" disabled={loading} className="mt-4 w-full">
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {t('continue')}
             </Button>
@@ -266,9 +280,11 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
                 <RadioGroupItem value={address.id} id={address.id} className="mt-1" />
                 <Label htmlFor={address.id} className="flex-1 cursor-pointer">
                   <Card className="p-4">
-                    <div className="leading-tight space-y-0">
+                    <div className="space-y-0 leading-tight">
                       <p className="font-medium">{address.fullName}</p>
-                      {address.company && <p className="text-sm text-muted-foreground">{address.company}</p>}
+                      {address.company && (
+                        <p className="text-sm text-muted-foreground">{address.company}</p>
+                      )}
                       <p className="text-sm text-muted-foreground">
                         {address.streetLine1}
                         {address.streetLine2 && `, ${address.streetLine2}`}
@@ -293,7 +309,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
             />
             <label
               htmlFor="same-billing"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               {t('useSameForBilling')}
             </label>
@@ -313,23 +329,18 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
               <DialogTrigger render={<Button type="button" variant="outline" />}>
                 {t('addNewAddress')}
               </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
                 <form onSubmit={handleSubmit(onSaveNewAddress)}>
                   <DialogHeader>
                     <DialogTitle>{t('addNewAddress')}</DialogTitle>
-                    <DialogDescription>
-                      {t('addNewAddressDescription')}
-                    </DialogDescription>
+                    <DialogDescription>{t('addNewAddressDescription')}</DialogDescription>
                   </DialogHeader>
 
                   <FieldGroup className="my-6">
                     <div className="grid grid-cols-2 gap-4">
                       <Field className="col-span-2">
                         <FieldLabel htmlFor="fullName">{t('fullNameLabel')}</FieldLabel>
-                        <Input
-                          id="fullName"
-                          {...register('fullName')}
-                        />
+                        <Input id="fullName" {...register('fullName')} />
                         <FieldError>{errors.fullName?.message}</FieldError>
                       </Field>
 
@@ -354,28 +365,19 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
                       <Field>
                         <FieldLabel htmlFor="city">{t('cityLabel')}</FieldLabel>
-                        <Input
-                          id="city"
-                          {...register('city')}
-                        />
+                        <Input id="city" {...register('city')} />
                         <FieldError>{errors.city?.message}</FieldError>
                       </Field>
 
                       <Field>
                         <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
-                        <Input
-                          id="province"
-                          {...register('province')}
-                        />
+                        <Input id="province" {...register('province')} />
                         <FieldError>{errors.province?.message}</FieldError>
                       </Field>
 
                       <Field>
                         <FieldLabel htmlFor="postalCode">{t('postalCodeLabel')}</FieldLabel>
-                        <Input
-                          id="postalCode"
-                          {...register('postalCode')}
-                        />
+                        <Input id="postalCode" {...register('postalCode')} />
                         <FieldError>{errors.postalCode?.message}</FieldError>
                       </Field>
 
@@ -399,18 +401,19 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
                       <Field className="col-span-2">
                         <FieldLabel htmlFor="phoneNumber">{t('phoneNumberLabel')}</FieldLabel>
-                        <Input
-                          id="phoneNumber"
-                          type="tel"
-                          {...register('phoneNumber')}
-                        />
+                        <Input id="phoneNumber" type="tel" {...register('phoneNumber')} />
                         <FieldError>{errors.phoneNumber?.message}</FieldError>
                       </Field>
                     </div>
                   </FieldGroup>
 
                   <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => setDialogOpen(false)} disabled={saving}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setDialogOpen(false)}
+                      disabled={saving}
+                    >
                       {t('cancel')}
                     </Button>
                     <Button type="submit" disabled={saving}>
@@ -430,23 +433,18 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
           <DialogTrigger render={<Button type="button" className="w-full" />}>
             {t('addShippingAddress')}
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
             <form onSubmit={handleSubmit(onSaveNewAddress)}>
               <DialogHeader>
                 <DialogTitle>{t('addShippingAddress')}</DialogTitle>
-                <DialogDescription>
-                  {t('addShippingAddressDescription')}
-                </DialogDescription>
+                <DialogDescription>{t('addShippingAddressDescription')}</DialogDescription>
               </DialogHeader>
 
               <FieldGroup className="my-6">
                 <div className="grid grid-cols-2 gap-4">
                   <Field className="col-span-2">
                     <FieldLabel htmlFor="fullName">{t('fullNameLabel')}</FieldLabel>
-                    <Input
-                      id="fullName"
-                      {...register('fullName')}
-                    />
+                    <Input id="fullName" {...register('fullName')} />
                     <FieldError>{errors.fullName?.message}</FieldError>
                   </Field>
 
@@ -471,28 +469,19 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
                   <Field>
                     <FieldLabel htmlFor="city">{t('cityLabel')}</FieldLabel>
-                    <Input
-                      id="city"
-                      {...register('city')}
-                    />
+                    <Input id="city" {...register('city')} />
                     <FieldError>{errors.city?.message}</FieldError>
                   </Field>
 
                   <Field>
                     <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
-                    <Input
-                      id="province"
-                      {...register('province')}
-                    />
+                    <Input id="province" {...register('province')} />
                     <FieldError>{errors.province?.message}</FieldError>
                   </Field>
 
                   <Field>
                     <FieldLabel htmlFor="postalCode">{t('postalCodeLabel')}</FieldLabel>
-                    <Input
-                      id="postalCode"
-                      {...register('postalCode')}
-                    />
+                    <Input id="postalCode" {...register('postalCode')} />
                     <FieldError>{errors.postalCode?.message}</FieldError>
                   </Field>
 
@@ -516,11 +505,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
                   <Field className="col-span-2">
                     <FieldLabel htmlFor="phoneNumber">{t('phoneNumberLabel')}</FieldLabel>
-                    <Input
-                      id="phoneNumber"
-                      type="tel"
-                      {...register('phoneNumber')}
-                    />
+                    <Input id="phoneNumber" type="tel" {...register('phoneNumber')} />
                     <FieldError>{errors.phoneNumber?.message}</FieldError>
                   </Field>
                 </div>

@@ -1,0 +1,21 @@
+{
+  "name": "@dinelane/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./base.mjs",
+    "./next": "./next.mjs",
+    "./node": "./node.mjs"
+  },
+  "dependencies": {
+    "@eslint/js": "latest",
+    "eslint-config-next": "latest",
+    "eslint-config-prettier": "latest",
+    "globals": "latest",
+    "typescript-eslint": "latest"
+  },
+  "peerDependencies": {
+    "eslint": ">=9"
+  }
+}

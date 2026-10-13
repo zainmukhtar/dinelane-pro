@@ -1,5 +1,5 @@
-import {getCurrencyCookie} from './currency';
-import {getActiveChannel} from '@/platform/vendure/channel';
+import { getCurrencyCookie } from './currency';
+import { getActiveChannel } from '@/platform/vendure/channel';
 
 /**
  * Get the active currency code for the current request.
@@ -9,9 +9,9 @@ import {getActiveChannel} from '@/platform/vendure/channel';
  * NOT safe inside public 'use cache' — pass currency as a parameter instead.
  */
 export async function getActiveCurrencyCode(): Promise<string> {
-    const cookieValue = await getCurrencyCookie();
-    if (cookieValue) return cookieValue;
+  const cookieValue = await getCurrencyCookie();
+  if (cookieValue) return cookieValue;
 
-    const channel = await getActiveChannel();
-    return channel.defaultCurrencyCode;
+  const channel = await getActiveChannel();
+  return channel.defaultCurrencyCode;
 }

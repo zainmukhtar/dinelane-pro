@@ -7,10 +7,7 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com
  * Truncate text to a maximum length while preserving word boundaries.
  * Strips HTML tags and is ideal for meta descriptions (recommended 150-160 chars).
  */
-export function truncateDescription(
-  text: string | null | undefined,
-  maxLength = 155
-): string {
+export function truncateDescription(text: string | null | undefined, maxLength = 155): string {
   if (!text) return '';
 
   // Strip HTML tags if present
@@ -22,9 +19,7 @@ export function truncateDescription(
   const truncated = cleanText.substring(0, maxLength);
   const lastSpaceIndex = truncated.lastIndexOf(' ');
 
-  return lastSpaceIndex > 0
-    ? truncated.substring(0, lastSpaceIndex) + '...'
-    : truncated + '...';
+  return lastSpaceIndex > 0 ? truncated.substring(0, lastSpaceIndex) + '...' : truncated + '...';
 }
 
 /**
@@ -41,7 +36,7 @@ export function buildCanonicalUrl(path: string): string {
  */
 export function buildOgImages(
   imageUrl: string | null | undefined,
-  alt?: string
+  alt?: string,
 ): NonNullable<Metadata['openGraph']>['images'] {
   if (!imageUrl) return undefined;
 

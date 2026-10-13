@@ -10,219 +10,198 @@ import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Link } from '@/platform/i18n/navigation';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 function createRegistrationSchema(t: ReturnType<typeof useTranslations<'Auth'>>) {
-    return z.object({
-        emailAddress: z.string().email(t('emailValidation')),
-        firstName: z.string().optional(),
-        lastName: z.string().optional(),
-        phoneNumber: z.string().optional(),
-        password: z.string().min(8, t('passwordMinLength')),
-        confirmPassword: z.string(),
-    }).refine((data) => data.password === data.confirmPassword, {
-        message: t('passwordsMismatch'),
-        path: ["confirmPassword"],
+  return z
+    .object({
+      emailAddress: z.string().email(t('emailValidation')),
+      firstName: z.string().optional(),
+      lastName: z.string().optional(),
+      phoneNumber: z.string().optional(),
+      password: z.string().min(8, t('passwordMinLength')),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('passwordsMismatch'),
+      path: ['confirmPassword'],
     });
 }
 
 type RegistrationFormData = z.infer<ReturnType<typeof createRegistrationSchema>>;
 
 interface RegistrationFormProps {
-    redirectTo?: string;
+  redirectTo?: string;
 }
 
 export function RegistrationForm({ redirectTo }: RegistrationFormProps) {
-    const t = useTranslations('Auth');
-    const [isPending, startTransition] = useTransition();
-    const [serverError, setServerError] = useState<string | null>(null);
+  const t = useTranslations('Auth');
+  const [isPending, startTransition] = useTransition();
+  const [serverError, setServerError] = useState<string | null>(null);
 
-    const registrationSchema = createRegistrationSchema(t);
-    const form = useForm<RegistrationFormData>({
-        resolver: zodResolver(registrationSchema),
-        defaultValues: {
-            emailAddress: '',
-            firstName: '',
-            lastName: '',
-            phoneNumber: '',
-            password: '',
-            confirmPassword: '',
-        },
+  const registrationSchema = createRegistrationSchema(t);
+  const form = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      emailAddress: '',
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
+
+  const onSubmit = (data: RegistrationFormData) => {
+    setServerError(null);
+
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append('emailAddress', data.emailAddress);
+      if (data.firstName) formData.append('firstName', data.firstName);
+      if (data.lastName) formData.append('lastName', data.lastName);
+      if (data.phoneNumber) formData.append('phoneNumber', data.phoneNumber);
+      formData.append('password', data.password);
+      if (redirectTo) {
+        formData.append('redirectTo', redirectTo);
+      }
+
+      const result = await registerAction(undefined, formData);
+      if (result?.error) {
+        setServerError(result.error);
+      }
     });
+  };
 
-    const onSubmit = (data: RegistrationFormData) => {
-        setServerError(null);
+  const signInHref = redirectTo
+    ? `/sign-in?redirectTo=${encodeURIComponent(redirectTo)}`
+    : '/sign-in';
 
-        startTransition(async () => {
-            const formData = new FormData();
-            formData.append('emailAddress', data.emailAddress);
-            if (data.firstName) formData.append('firstName', data.firstName);
-            if (data.lastName) formData.append('lastName', data.lastName);
-            if (data.phoneNumber) formData.append('phoneNumber', data.phoneNumber);
-            formData.append('password', data.password);
-            if (redirectTo) {
-                formData.append('redirectTo', redirectTo);
-            }
+  return (
+    <Card>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="emailAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('emailAddressLabel')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="you@example.com"
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            const result = await registerAction(undefined, formData);
-            if (result?.error) {
-                setServerError(result.error);
-            }
-        });
-    };
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('firstNameLabel')}</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="John" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-    const signInHref = redirectTo
-        ? `/sign-in?redirectTo=${encodeURIComponent(redirectTo)}`
-        : '/sign-in';
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('lastNameLabel')}</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="Doe" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-    return (
-        <Card>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <CardContent className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="emailAddress"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('emailAddressLabel')}</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="email"
-                                            placeholder="you@example.com"
-                                            disabled={isPending}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('phoneNumberLabel')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="tel"
+                      placeholder="+1 (555) 000-0000"
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField
-                                control={form.control}
-                                name="firstName"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('firstNameLabel')}</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder="John"
-                                                disabled={isPending}
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('passwordLabel')}</FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="••••••••" disabled={isPending} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                            <FormField
-                                control={form.control}
-                                name="lastName"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('lastNameLabel')}</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder="Doe"
-                                                disabled={isPending}
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('confirmPasswordLabel')}</FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="••••••••" disabled={isPending} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                        <FormField
-                            control={form.control}
-                            name="phoneNumber"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('phoneNumberLabel')}</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="tel"
-                                            placeholder="+1 (555) 000-0000"
-                                            disabled={isPending}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+            {serverError && <div className="text-sm text-destructive">{serverError}</div>}
 
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('passwordLabel')}</FormLabel>
-                                    <FormControl>
-                                        <PasswordInput
-                                            placeholder="••••••••"
-                                            disabled={isPending}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="confirmPassword"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('confirmPasswordLabel')}</FormLabel>
-                                    <FormControl>
-                                        <PasswordInput
-                                            placeholder="••••••••"
-                                            disabled={isPending}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {serverError && (
-                            <div className="text-sm text-destructive">
-                                {serverError}
-                            </div>
-                        )}
-
-                        <Button type="submit" className="w-full" disabled={isPending}>
-                            {isPending ? t('creatingAccount') : t('createAccount')}
-                        </Button>
-                    </CardContent>
-                    <CardFooter className="flex flex-col space-y-4 mt-4">
-
-                        <div className="text-sm text-center text-muted-foreground">
-                            {t('alreadyHaveAccount')}{' '}
-                            <Link href={signInHref} className="hover:text-primary underline">
-                                {t('signInLink')}
-                            </Link>
-                        </div>
-                    </CardFooter>
-                </form>
-            </Form>
-        </Card>
-    );
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? t('creatingAccount') : t('createAccount')}
+            </Button>
+          </CardContent>
+          <CardFooter className="mt-4 flex flex-col space-y-4">
+            <div className="text-center text-sm text-muted-foreground">
+              {t('alreadyHaveAccount')}{' '}
+              <Link href={signInHref} className="underline hover:text-primary">
+                {t('signInLink')}
+              </Link>
+            </div>
+          </CardFooter>
+        </form>
+      </Form>
+    </Card>
+  );
 }

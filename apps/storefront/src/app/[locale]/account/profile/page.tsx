@@ -1,1 +1,1 @@
-export {default, generateMetadata} from '@/features/account/routes/profile/page';
+export { default, generateMetadata } from '@/features/account/routes/profile/page';

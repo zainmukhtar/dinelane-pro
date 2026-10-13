@@ -1,1 +1,1 @@
-export {default, generateMetadata} from '@/features/collections/routes/page';
+export { default, generateMetadata } from '@/features/collections/routes/page';

@@ -23,16 +23,16 @@ Establish the source-distributed storefront architecture and the first managed u
 
 Preserve downstream behavior while mapping customized files to their new owners:
 
-| Previous location | Managed-baseline location |
-| --- | --- |
-| `src/app/[locale]/**` implementations | `src/features/*/routes/**`, with thin re-exports under `src/app/` |
-| `src/components/account/**` | `src/features/account/**` |
-| `src/components/commerce/**` | `src/features/orders/**`, `src/features/pricing/**`, or `src/features/products/**` |
-| `src/components/layout/**` | `src/site/**` |
-| `src/components/shared/**` | The owning feature, `src/site/**`, or `src/components/ui/**` |
-| `src/lib/vendure/**` and `src/graphql.ts` | `src/platform/vendure/**` plus feature-owned `graphql.ts` operations |
-| `src/i18n/**` and root `messages/**` | `src/platform/i18n/**` plus feature- and site-owned message files |
-| `src/lib/metadata.ts` | `src/config/metadata.ts` |
+| Previous location                         | Managed-baseline location                                                          |
+| ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| `src/app/[locale]/**` implementations     | `src/features/*/routes/**`, with thin re-exports under `src/app/`                  |
+| `src/components/account/**`               | `src/features/account/**`                                                          |
+| `src/components/commerce/**`              | `src/features/orders/**`, `src/features/pricing/**`, or `src/features/products/**` |
+| `src/components/layout/**`                | `src/site/**`                                                                      |
+| `src/components/shared/**`                | The owning feature, `src/site/**`, or `src/components/ui/**`                       |
+| `src/lib/vendure/**` and `src/graphql.ts` | `src/platform/vendure/**` plus feature-owned `graphql.ts` operations               |
+| `src/i18n/**` and root `messages/**`      | `src/platform/i18n/**` plus feature- and site-owned message files                  |
+| `src/lib/metadata.ts`                     | `src/config/metadata.ts`                                                           |
 
 When a path has downstream edits, move the customization with the behavior instead of replacing it with the upstream file.
 

@@ -74,7 +74,7 @@ export function CheckoutProvider({
   isGuest,
 }: CheckoutProviderProps) {
   const [selectedPaymentMethodCode, setSelectedPaymentMethodCode] = useState<string | null>(
-    paymentMethods.length === 1 ? paymentMethods[0].code : null
+    paymentMethods.length === 1 ? paymentMethods[0].code : null,
   );
 
   return (

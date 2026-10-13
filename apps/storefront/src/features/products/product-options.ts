@@ -1,5 +1,5 @@
 import type { ResultOf } from 'gql.tada';
-import type {GetProductDetailQuery} from './graphql';
+import type { GetProductDetailQuery } from './graphql';
 
 type ProductDetail = NonNullable<ResultOf<typeof GetProductDetailQuery>['product']>;
 
@@ -14,14 +14,14 @@ type ProductDetail = NonNullable<ResultOf<typeof GetProductDetailQuery>['product
  * the product's variants, dropping any group left with no options.
  */
 export function getDisplayOptionGroups(product: ProductDetail): ProductDetail['optionGroups'] {
-    const usedOptionIds = new Set(
-        product.variants.flatMap((variant) => variant.options.map((option) => option.id)),
-    );
+  const usedOptionIds = new Set(
+    product.variants.flatMap((variant) => variant.options.map((option) => option.id)),
+  );
 
-    return product.optionGroups
-        .map((group) => ({
-            ...group,
-            options: group.options.filter((option) => usedOptionIds.has(option.id)),
-        }))
-        .filter((group) => group.options.length > 0);
+  return product.optionGroups
+    .map((group) => ({
+      ...group,
+      options: group.options.filter((option) => usedOptionIds.has(option.id)),
+    }))
+    .filter((group) => group.options.length > 0);
 }

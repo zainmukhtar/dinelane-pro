@@ -1,6 +1,6 @@
-import type {MessageLoaders} from '@/platform/i18n/messages';
+import type { MessageLoaders } from '@/platform/i18n/messages';
 
 export const collectionsMessageLoaders: MessageLoaders = {
-    en: () => import('./messages/en.json'),
-    de: () => import('./messages/de.json'),
+  en: () => import('./messages/en.json'),
+  de: () => import('./messages/de.json'),
 };

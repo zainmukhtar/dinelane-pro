@@ -6,7 +6,7 @@ import { Field, FieldLabel, FieldError, FieldGroup } from '@/components/ui/field
 import { useForm, Controller } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { CountrySelect } from '@/components/ui/country-select';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 interface Country {
   id: string;
@@ -49,22 +49,35 @@ interface AddressFormProps {
   isSubmitting: boolean;
 }
 
-export function AddressForm({ countries, address, onSubmit, onCancel, isSubmitting }: AddressFormProps) {
+export function AddressForm({
+  countries,
+  address,
+  onSubmit,
+  onCancel,
+  isSubmitting,
+}: AddressFormProps) {
   const t = useTranslations('Account');
-  const { register, handleSubmit, formState: { errors }, control } = useForm<AddressFormData>({
-    defaultValues: address ? {
-      fullName: address.fullName || '',
-      company: address.company || '',
-      streetLine1: address.streetLine1,
-      streetLine2: address.streetLine2 || '',
-      city: address.city || '',
-      province: address.province || '',
-      postalCode: address.postalCode || '',
-      countryCode: address.country.code,
-      phoneNumber: address.phoneNumber || '',
-    } : {
-      countryCode: countries[0]?.code || 'US',
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<AddressFormData>({
+    defaultValues: address
+      ? {
+          fullName: address.fullName || '',
+          company: address.company || '',
+          streetLine1: address.streetLine1,
+          streetLine2: address.streetLine2 || '',
+          city: address.city || '',
+          province: address.province || '',
+          postalCode: address.postalCode || '',
+          countryCode: address.country.code,
+          phoneNumber: address.phoneNumber || '',
+        }
+      : {
+          countryCode: countries[0]?.code || 'US',
+        },
   });
 
   const handleFormSubmit = async (data: AddressFormData) => {
@@ -166,7 +179,7 @@ export function AddressForm({ countries, address, onSubmit, onCancel, isSubmitti
         </div>
       </FieldGroup>
 
-      <div className="flex gap-3 justify-end">
+      <div className="flex justify-end gap-3">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
           {t('cancel')}
         </Button>
